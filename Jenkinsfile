@@ -7,6 +7,9 @@ pipeline {
         GIT_REPO = "https://github.com/khalil-bot/my-microservice.git"
         KUBE_CONTEXT = "kubernetes-admin@kubernetes"
     }
+    tools {
+    maven 'Maven3'
+         }
 
     stages {
         stage('Checkout') {
