@@ -8,7 +8,7 @@ pipeline {
         KUBE_CONTEXT = "kubernetes-admin@kubernetes"
     }
     tools {
-    maven 'Maven3'
+    maven 'maven3'
          }
 
     stages {
