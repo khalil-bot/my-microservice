@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+/*         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     kubernetesDeploy(
@@ -56,7 +56,16 @@ pipeline {
                     )
                 }
             }
+        } */
+
+        stage('Deploy to Kubernetes') {
+    steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+            sh 'kubectl apply -f kubernetes/deployment.yaml'
         }
+    }
+}
+
     }
 
     post {
