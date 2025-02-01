@@ -9,7 +9,7 @@ pipeline {
     }
     tools {
       maven 'maven3'
-
+      
          }
 
     stages {
@@ -30,7 +30,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_REGISTRY}/${IMAGE_NAME}:${GIT_COMMIT}")
+                    docker.build("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:${GIT_COMMIT}")
                 }
             }
         }
