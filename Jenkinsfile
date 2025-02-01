@@ -9,7 +9,7 @@ pipeline {
     }
     tools {
       maven 'maven3'
-      
+
          }
 
     stages {
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("http://${DOCKER_REGISTRY}", 'harbor-credentials') {
-                        docker.image("${DOCKER_REGISTRY}/${IMAGE_NAME}:${GIT_COMMIT}").push()
+                        docker.image("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:${GIT_COMMIT}").push()
                     }
                 }
             }
