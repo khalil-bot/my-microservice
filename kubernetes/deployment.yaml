@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: my-microservice
-        image: harbor.local/microservice/my-microservice:latest
+        image: harbor.local/microservice/my-microservice:v1
         ports:
         - containerPort: 8080
 

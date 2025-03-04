@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
              //       docker.build("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:${GIT_COMMIT}")
-                     docker.build("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:latest")
+                     docker.build("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:v1")
 
                 }
             }
@@ -42,7 +42,7 @@ pipeline {
                 script {
                     docker.withRegistry("http://${DOCKER_REGISTRY}", 'harbor-credentials') {
                  //       docker.image("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:${GIT_COMMIT}").push()
-                                         docker.image("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:latest").push()
+                                         docker.image("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:v1").push()
 
                     }
                 }
