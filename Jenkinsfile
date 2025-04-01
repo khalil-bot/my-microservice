@@ -2,14 +2,15 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = "docker.io/khaliloulah"
+        DOCKER_REGISTRY = "harbor.local"
         IMAGE_NAME = "my-microservice"
         GIT_REPO = "https://github.com/khalil-bot/my-microservice.git"
         KUBE_CONTEXT = "kubernetes-admin@kubernetes"
     }
     tools {
-        maven 'maven3'
-    }
+      maven 'maven3'
+      
+         }
 
     stages {
         stage('Checkout') {
@@ -21,7 +22,7 @@ pipeline {
         stage('Build JAR') {
             steps {
                 script {
-                    sh 'mvn clean package -DskipTests' // Compile the application
+                    sh 'mvn clean package -DskipTests' // Compile l'application
                 }
             }
         }
@@ -29,28 +30,47 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_REGISTRY}/${IMAGE_NAME}:v1")
+             //       docker.build("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:${GIT_COMMIT}")
+                     docker.build("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:v1")
+
                 }
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Push to Harbor') {
             steps {
                 script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'docker-hub-credentials') {
-                        docker.image("${DOCKER_REGISTRY}/${IMAGE_NAME}:v1").push()
+                    docker.withRegistry("http://${DOCKER_REGISTRY}", 'harbor-credentials') {
+                 //       docker.image("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:${GIT_COMMIT}").push()
+                                         docker.image("${DOCKER_REGISTRY}/microservice/${IMAGE_NAME}:v1").push()
+
                     }
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
+/*         stage('Deploy to Kubernetes') {
             steps {
-                withKubeConfig([credentialsId: 'kubeconfig']) {
-                    sh 'kubectl apply -f kubernetes/deployment.yaml'
+                script {
+                    kubernetesDeploy(
+                        kubeconfigId: 'kubeconfig',
+                        configs: 'kubernetes/deployment.yaml',
+                        enableConfigSubstitution: true,
+                        secretName: 'my-secret'
+                    )
                 }
             }
+        } */
+
+        stage('Deploy to Kubernetes') {
+    steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+            
+            sh 'kubectl apply -f kubernetes/deployment.yaml'
         }
+    }
+}
+
     }
 
     post {
